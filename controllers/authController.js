@@ -1,5 +1,5 @@
 const User = require('../models/User'); 
-
+const jwt = require('jsonwebtoken');
 // error handling function
 const handleErrors = (err) => {
     //evaluate the error objects that comes from User model and return a more useful object which can be sent as a JSON to the user
@@ -22,6 +22,13 @@ const handleErrors = (err) => {
     }
 }
 
+const maxAge = 3*24*60*60;
+const createToken = (id) => {
+    return jwt.sign({id}, 'samarth secret key', {
+        expiresIn: maxAge
+    })
+}
+
 module.exports.signup_get = (req, res) => {
     res.render('signup');
 }
@@ -32,7 +39,9 @@ module.exports.signup_post = async (req, res) => {
 
     try{
         const user = await User.create({ email, password});
-        res.status(201).json(user);
+        const token = createToken(user._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge*1000});
+        res.status(201).json({user: user._id});
     }
 
     catch (err) {         // error handling
