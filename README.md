@@ -5,3 +5,4 @@ I have used hashing algorithm to hash the password before saving it to the datab
 Cookies stores data in the user's browser.
 Authentication using Cookies and JWT have some pitfalls. If we have state changing endpoints then we need to take care of CSRF. (Need to study this in detail).
 JWT token is an encoded long string of characters which consists of three parts which are the Header, Payload and the Signature.
+Create the JWT after validating the user and then compare.
